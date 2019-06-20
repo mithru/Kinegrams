@@ -1,16 +1,32 @@
+void addFrame(PImage img) {
+  background(255);
+  shutter.play();
+  println("taking pic " + currentFrame);
+  lastMillis = millis();
+  frames[currentFrame] = img;
+  currentFrame++;
+}
 
-PImage[] takePictures(int numberOfPics, int delayBetweenPics) {
-  int currMillis = millis();
-  //int currFrame = 0;
-  PImage f[] = new PImage[numberOfPics];
-
-  for (int currFrame = 0; currFrame < numberOfPics; currFrame++ ) {
-    if (cam.available() == true) {
-      println("taking picture " + currFrame);
-      cam.read();
-      f[currFrame] = cam.get();
-      delay(delayBetweenPics);
-    }
-  }
-  return f;
+// buttons
+public void takePicture() {
+  println("takePicture button clicked");
+  addFrame(cam.get());
+  cp5.getController("takePicture").hide();
+}
+public void printPhoto() {
+  println("printPhoto button clicked");
+  currentKinegram.save("lastImage.png");
+  cp5.getController("printPhoto").setLabel("Printing... please wait until done");
+  printImage("/Users/mithruvigneshwara/Desktop/residentsshow/photobooth/lastImage.png");
+  lastMillis = millis();
+  currentMask.save("lastMask.png");
+}
+public void restart() {
+  println("restart button clicked");
+  cp5.getController("printPhoto").hide();
+  cp5.getController("restart").hide();
+  cp5.getController("takePicture").show();
+  cp5.getController("printPhoto").setLabel("Print!");
+  SHOWMASK = false;
+  currentKinegram = null;
 }
